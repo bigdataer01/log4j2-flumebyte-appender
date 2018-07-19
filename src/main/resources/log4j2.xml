@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<Configuration status="WARN">
+    <Appenders>
+        <Console name="Console" target="SYSTEM_OUT">
+            <PatternLayout pattern="%d{HH:mm:ss.SSS} [%t] %-5level %logger{36} - %msg%n"/>
+        </Console>
+        <!--use custome FlumeByteAppender-->
+        <FlumeByte name="eventLogger" compress="false" type="Avro">
+            <!--it can config more than one host for HA
+                attention to your host ip and port that must same with your configuration in flume -->
+            <Agent host="0.0.0.0" port="7777"/>
+        </FlumeByte>
+        <!--you had better to use AsyncAppender to ref FlumeByte-->
+        <Async name="Async">
+            <AppenderRef ref="eventLogger"/>
+        </Async>
+    </Appenders>
+    <Loggers>
+        <Root level="info">
+            <AppenderRef ref="Async"/>
+            <AppenderRef ref="Console"></AppenderRef>
+        </Root>
+    </Loggers>
+</Configuration>
